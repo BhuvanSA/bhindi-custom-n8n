@@ -1,190 +1,1004 @@
 [
   {
-    "name": "add",
-    "description": "Add two numbers together",
+    "name": "customn8n_generateAudit",
+    "description": "Generate a security audit for your n8n instance.",
     "parameters": {
       "type": "object",
       "properties": {
-        "a": {
-          "type": "number",
-          "description": "First number"
-        },
-        "b": {
-          "type": "number",
-          "description": "Second number"
+        "additionalOptions": {
+          "type": "object",
+          "description": "Additional options for generating the audit report.",
+          "properties": {
+            "daysAbandonedWorkflow": {
+              "type": "integer",
+              "description": "Days for a workflow to be considered abandoned if not executed."
+            },
+            "categories": {
+              "type": "array",
+              "description": "Categories to include in the audit report.",
+              "items": {
+                "type": "string",
+                "enum": ["credentials", "database", "nodes", "filesystem", "instance"]
+              }
+            }
+          }
         }
-      },
-      "required": ["a", "b"]
-    }
-  },
-  {
-    "name": "subtract",
-    "description": "Subtract second number from first number (requires confirmation for demonstration)",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "a": {
-          "type": "number",
-          "description": "Number to subtract from"
-        },
-        "b": {
-          "type": "number",
-          "description": "Number to subtract"
-        }
-      },
-      "required": ["a", "b"]
+      }
     },
     "confirmationRequired": true
   },
   {
-    "name": "multiply",
-    "description": "Multiply two numbers",
+    "name": "customn8n_createCredential",
+    "description": "Creates a credential that can be used by nodes of the specified type.",
     "parameters": {
       "type": "object",
       "properties": {
-        "a": {
-          "type": "number",
-          "description": "First number"
-        },
-        "b": {
-          "type": "number",
-          "description": "Second number"
-        }
-      },
-      "required": ["a", "b"]
-    }
-  },
-  {
-    "name": "divide",
-    "description": "Divide first number by second number",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "a": {
-          "type": "number",
-          "description": "Dividend (number to be divided)"
-        },
-        "b": {
-          "type": "number",
-          "description": "Divisor (number to divide by, cannot be zero)"
-        }
-      },
-      "required": ["a", "b"]
-    }
-  },
-  {
-    "name": "power",
-    "description": "Calculate a number raised to a power (a^b)",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "base": {
-          "type": "number",
-          "description": "Base number"
-        },
-        "exponent": {
-          "type": "number",
-          "description": "Exponent"
-        }
-      },
-      "required": ["base", "exponent"]
-    }
-  },
-  {
-    "name": "sqrt",
-    "description": "Calculate the square root of a number",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "number": {
-          "type": "number",
-          "description": "Number to calculate square root of (must be non-negative)"
-        }
-      },
-      "required": ["number"]
-    }
-  },
-  {
-    "name": "percentage",
-    "description": "Calculate percentage of a number (a% of b)",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "percentage": {
-          "type": "number",
-          "description": "Percentage value"
-        },
-        "of": {
-          "type": "number",
-          "description": "Number to calculate percentage of"
-        }
-      },
-      "required": ["percentage", "of"]
-    }
-  },
-  {
-    "name": "factorial",
-    "description": "Calculate factorial of a number (n!) - expensive operation for large numbers",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "number": {
-          "type": "number",
-          "description": "Non-negative integer to calculate factorial of (recommended max: 20)"
-        }
-      },
-      "required": ["number"]
-    },
-    "confirmationRequired": true
-  },
-  {
-    "name": "countCharacter",
-    "description": "Count the number of times a specific character appears in text",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "character": {
+        "name": {
           "type": "string",
-          "description": "Character to count (single character)"
-        },
-        "text": {
-          "type": "string",
-          "description": "Text to search in"
-        }
-      },
-      "required": ["character", "text"]
-    }
-  },
-  {
-    "name": "listUserRepositories",
-    "description": "List repositories for the authenticated GitHub user (requires Bearer token authentication)",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "per_page": {
-          "type": "number",
-          "description": "Number of repositories to return (1-100)",
-          "default": 10
-        },
-        "sort": {
-          "type": "string",
-          "description": "Sort repositories by",
-          "enum": ["created", "updated", "pushed", "full_name"],
-          "default": "updated"
-        },
-        "direction": {
-          "type": "string",
-          "description": "Sort direction",
-          "enum": ["asc", "desc"],
-          "default": "desc"
+          "description": "Name of the credential."
         },
         "type": {
           "type": "string",
-          "description": "Repository type filter",
-          "enum": ["all", "owner", "public", "private", "member"],
-          "default": "owner"
+          "description": "Type of the credential (e.g., 'github')."
+        },
+        "data": {
+          "type": "object",
+          "description": "The credential data. Varies based on the credential type."
+        }
+      },
+      "required": ["name", "type", "data"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_deleteCredential",
+    "description": "Deletes a credential from your instance. You must be the owner of the credentials.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The credential ID that needs to be deleted."
+        }
+      },
+      "required": ["id"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_getCredentialType",
+    "description": "Show credential data schema.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "credentialTypeName": {
+          "type": "string",
+          "description": "The credential type name that you want to get the schema for."
+        }
+      },
+      "required": ["credentialTypeName"]
+    }
+  },
+  {
+    "name": "customn8n_getExecutions",
+    "description": "Retrieve all executions from your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "includeData": {
+          "type": "boolean",
+          "description": "Whether or not to include the execution's detailed data."
+        },
+        "status": {
+          "type": "string",
+          "description": "Status to filter the executions by.",
+          "enum": ["error", "success", "waiting"]
+        },
+        "workflowId": {
+          "type": "string",
+          "description": "Workflow to filter the executions by."
+        },
+        "projectId": {
+          "type": "string",
+          "description": "Project to filter the executions by."
+        },
+        "limit": {
+          "type": "number",
+          "description": "The maximum number of items to return.",
+          "default": 100
+        },
+        "cursor": {
+          "type": "string",
+          "description": "Paginate by setting the cursor parameter to the nextCursor attribute returned by the previous request's response."
         }
       }
     }
+  },
+  {
+    "name": "customn8n_getExecution",
+    "description": "Retrieve an execution from your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "description": "The ID of the execution."
+        },
+        "includeData": {
+          "type": "boolean",
+          "description": "Whether or not to include the execution's detailed data."
+        }
+      },
+      "required": ["id"]
+    }
+  },
+  {
+    "name": "customn8n_deleteExecution",
+    "description": "Deletes an execution from your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "description": "The ID of the execution."
+        }
+      },
+      "required": ["id"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_createTag",
+    "description": "Create a tag in your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the tag to create."
+        }
+      },
+      "required": ["name"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_getTags",
+    "description": "Retrieve all tags from your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "number",
+          "description": "The maximum number of items to return.",
+          "default": 100
+        },
+        "cursor": {
+          "type": "string",
+          "description": "Paginate by setting the cursor parameter to the nextCursor attribute returned by the previous request's response."
+        }
+      }
+    }
+  },
+  {
+    "name": "customn8n_getTag",
+    "description": "Retrieves a tag.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID of the tag."
+        }
+      },
+      "required": ["id"]
+    }
+  },
+  {
+    "name": "customn8n_deleteTag",
+    "description": "Deletes a tag.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID of the tag."
+        }
+      },
+      "required": ["id"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_updateTag",
+    "description": "Update a tag.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID of the tag to update."
+        },
+        "name": {
+          "type": "string",
+          "description": "The new name for the tag."
+        }
+      },
+      "required": ["id", "name"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_createWorkflow",
+    "description": "Create a workflow in your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the workflow."
+        },
+        "nodes": {
+          "type": "array",
+          "description": "An array of node objects that make up the workflow. Each node represents a step in the workflow.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier for the node within the workflow."
+              },
+              "name": {
+                "type": "string",
+                "description": "Display name of the node."
+              },
+              "type": {
+                "type": "string",
+                "description": "Node type identifier (e.g., 'n8n-nodes-base.start', 'n8n-nodes-base.httpRequest')."
+              },
+              "typeVersion": {
+                "type": "number",
+                "description": "Version of the node type being used.",
+                "default": 1
+              },
+              "position": {
+                "type": "array",
+                "description": "Position of the node in the workflow editor [x, y]. Array should contain exactly 2 numbers representing x and y coordinates.",
+                "items": {
+                  "type": "number"
+                }
+              },
+              "parameters": {
+                "type": "object",
+                "description": "Node-specific configuration parameters. Structure varies based on node type."
+              },
+              "credentials": {
+                "type": "object",
+                "description": "Credentials configuration for the node. This object maps credential types to their respective credential configurations containing id and name."
+              },
+              "webhookId": {
+                "type": "string",
+                "description": "Webhook ID for webhook trigger nodes."
+              },
+              "disabled": {
+                "type": "boolean",
+                "description": "Whether the node is disabled.",
+                "default": false
+              }
+            },
+            "required": ["id", "name", "type", "position"]
+          }
+        },
+        "connections": {
+          "type": "object",
+          "description": "Object defining how nodes are connected. Each key is a source node name, and the value describes its outgoing connections. The structure follows n8n's connection format where each node can have 'main' output connections."
+        },
+        "settings": {
+          "type": "object",
+          "description": "Workflow execution and behavior settings.",
+          "properties": {
+            "executionOrder": {
+              "type": "string",
+              "description": "Execution order strategy for the workflow.",
+              "enum": ["v0", "v1"],
+              "default": "v1"
+            },
+            "saveManualExecutions": {
+              "type": "boolean",
+              "description": "Whether to save manual executions in the database.",
+              "default": true
+            },
+            "saveExecutionProgress": {
+              "type": "boolean",
+              "description": "Whether to save execution progress.",
+              "default": false
+            },
+            "saveDataErrorExecution": {
+              "type": "string",
+              "description": "When to save executions that error.",
+              "enum": ["all", "none"],
+              "default": "all"
+            },
+            "saveDataSuccessExecution": {
+              "type": "string",
+              "description": "When to save successful executions.",
+              "enum": ["all", "none"],
+              "default": "all"
+            },
+            "callerPolicy": {
+              "type": "string",
+              "description": "Policy for workflow execution calls.",
+              "enum": ["workflowsFromSameOwner", "workflowsFromAList", "any"],
+              "default": "workflowsFromSameOwner"
+            },
+            "callerIds": {
+              "type": "string",
+              "description": "Comma-separated list of workflow IDs that can call this workflow (when callerPolicy is 'workflowsFromAList')."
+            },
+            "errorWorkflow": {
+              "type": "string",
+              "description": "ID of workflow to execute when this workflow errors."
+            },
+            "timezone": {
+              "type": "string",
+              "description": "Timezone for the workflow (e.g., 'America/New_York')."
+            }
+          }
+        }
+      },
+      "required": ["name", "nodes", "connections", "settings"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_getWorkflows",
+    "description": "Retrieve all workflows from your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "active": {
+          "type": "boolean",
+          "description": "Filter by active status."
+        },
+        "tags": {
+          "type": "string",
+          "description": "Comma-separated list of tags to filter by."
+        },
+        "name": {
+          "type": "string",
+          "description": "Filter by workflow name."
+        },
+        "projectId": {
+          "type": "string",
+          "description": "Filter by project ID."
+        },
+        "excludePinnedData": {
+          "type": "boolean",
+          "description": "Set to true to avoid retrieving pinned data."
+        },
+        "limit": {
+          "type": "number",
+          "description": "The maximum number of items to return.",
+          "default": 100
+        },
+        "cursor": {
+          "type": "string",
+          "description": "Pagination cursor."
+        }
+      }
+    }
+  },
+  {
+    "name": "customn8n_getWorkflow",
+    "description": "Retrieves a workflow.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID of the workflow."
+        },
+        "excludePinnedData": {
+          "type": "boolean",
+          "description": "Set to true to avoid retrieving pinned data."
+        }
+      },
+      "required": ["id"]
+    }
+  },
+  {
+    "name": "customn8n_deleteWorkflow",
+    "description": "Deletes a workflow.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID of the workflow."
+        }
+      },
+      "required": ["id"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_updateWorkflow",
+    "description": "Update a workflow.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID of the workflow to update."
+        },
+        "name": {
+          "type": "string",
+          "description": "The new name for the workflow."
+        },
+        "nodes": {
+          "type": "array",
+          "description": "The updated array of node objects that make up the workflow.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier for the node within the workflow."
+              },
+              "name": {
+                "type": "string",
+                "description": "Display name of the node."
+              },
+              "type": {
+                "type": "string",
+                "description": "Node type identifier (e.g., 'n8n-nodes-base.start', 'n8n-nodes-base.httpRequest')."
+              },
+              "typeVersion": {
+                "type": "number",
+                "description": "Version of the node type being used.",
+                "default": 1
+              },
+              "position": {
+                "type": "array",
+                "description": "Position of the node in the workflow editor [x, y]. Array should contain exactly 2 numbers representing x and y coordinates.",
+                "items": {
+                  "type": "number"
+                }
+              },
+              "parameters": {
+                "type": "object",
+                "description": "Node-specific configuration parameters. Structure varies based on node type."
+              },
+              "credentials": {
+                "type": "object",
+                "description": "Credentials configuration for the node. This object maps credential types to their respective credential configurations containing id and name."
+              },
+              "webhookId": {
+                "type": "string",
+                "description": "Webhook ID for webhook trigger nodes."
+              },
+              "disabled": {
+                "type": "boolean",
+                "description": "Whether the node is disabled.",
+                "default": false
+              }
+            },
+            "required": ["id", "name", "type", "position"]
+          }
+        },
+        "connections": {
+          "type": "object",
+          "description": "The updated connections object defining how nodes are connected. Each key is a source node name, and the value describes its outgoing connections."
+        },
+        "settings": {
+          "type": "object",
+          "description": "The updated workflow execution and behavior settings.",
+          "properties": {
+            "executionOrder": {
+              "type": "string",
+              "description": "Execution order strategy for the workflow.",
+              "enum": ["v0", "v1"],
+              "default": "v1"
+            },
+            "saveManualExecutions": {
+              "type": "boolean",
+              "description": "Whether to save manual executions in the database.",
+              "default": true
+            },
+            "saveExecutionProgress": {
+              "type": "boolean",
+              "description": "Whether to save execution progress.",
+              "default": false
+            },
+            "saveDataErrorExecution": {
+              "type": "string",
+              "description": "When to save executions that error.",
+              "enum": ["all", "none"],
+              "default": "all"
+            },
+            "saveDataSuccessExecution": {
+              "type": "string",
+              "description": "When to save successful executions.",
+              "enum": ["all", "none"],
+              "default": "all"
+            },
+            "callerPolicy": {
+              "type": "string",
+              "description": "Policy for workflow execution calls.",
+              "enum": ["workflowsFromSameOwner", "workflowsFromAList", "any"],
+              "default": "workflowsFromSameOwner"
+            },
+            "callerIds": {
+              "type": "string",
+              "description": "Comma-separated list of workflow IDs that can call this workflow (when callerPolicy is 'workflowsFromAList')."
+            },
+            "errorWorkflow": {
+              "type": "string",
+              "description": "ID of workflow to execute when this workflow errors."
+            },
+            "timezone": {
+              "type": "string",
+              "description": "Timezone for the workflow (e.g., 'America/New_York')."
+            }
+          }
+        }
+      },
+      "required": []
+    }
+  },
+  {
+    "name": "customn8n_activateWorkflow",
+    "description": "Activate a workflow.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID of the workflow."
+        }
+      },
+      "required": ["id"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_deactivateWorkflow",
+    "description": "Deactivate a workflow.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID of the workflow."
+        }
+      },
+      "required": ["id"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_transferWorkflow",
+    "description": "Transfer a workflow to another project.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID of the workflow to transfer."
+        },
+        "destinationProjectId": {
+          "type": "string",
+          "description": "The ID of the project to transfer the workflow to."
+        }
+      },
+      "required": ["id", "destinationProjectId"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_transferCredential",
+    "description": "Transfer a credential to another project.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID of the credential to transfer."
+        },
+        "destinationProjectId": {
+          "type": "string",
+          "description": "The ID of the project to transfer the credential to."
+        }
+      },
+      "required": ["id", "destinationProjectId"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_getWorkflowTags",
+    "description": "Get workflow tags.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID of the workflow."
+        }
+      },
+      "required": ["id"]
+    }
+  },
+  {
+    "name": "customn8n_updateWorkflowTags",
+    "description": "Update tags of a workflow.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID of the workflow."
+        },
+        "tags": {
+          "type": "array",
+          "description": "List of tag IDs to associate with the workflow.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The ID of the tag."
+              }
+            },
+            "required": ["id"]
+          }
+        }
+      },
+      "required": ["id", "tags"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_getUsers",
+    "description": "Retrieve all users from your instance. (requires authentication)",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "number",
+          "description": "Maximum number of users to retrieve (default: 100)",
+          "default": 100
+        },
+        "cursor": {
+          "type": "string",
+          "description": "Paginate by setting the cursor parameter to the nextCursor attribute returned by the previous request's response. Default value fetches the first page of the collection."
+        },
+        "includeRole": {
+          "type": "boolean",
+          "description": "Whether to include user roles in the response.",
+          "default": false
+        },
+        "projectId": {
+          "type": "string",
+          "description": "Filter users by project ID."
+        }
+      }
+    }
+  },
+  {
+    "name": "customn8n_createUsers",
+    "description": "Create one or more users.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "description": "Array of users to be created.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string",
+                "enum": ["global:admin", "global:member"]
+              }
+            },
+            "required": ["email"]
+          }
+        }
+      },
+      "required": ["users"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_getUser",
+    "description": "Retrieve a user from your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID or email of the user."
+        },
+        "includeRole": {
+          "type": "boolean",
+          "description": "Whether to include the user's role or not.",
+          "default": false
+        }
+      },
+      "required": ["id"]
+    }
+  },
+  {
+    "name": "customn8n_deleteUser",
+    "description": "Delete a user from your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID of the user."
+        }
+      },
+      "required": ["id"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_changeRole",
+    "description": "Change a user's global role",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID of the user."
+        },
+        "newRoleName": {
+          "type": "string",
+          "description": "The new global role for the user.",
+          "enum": ["global:admin", "global:member"]
+        }
+      },
+      "required": ["id", "newRoleName"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_pull",
+    "description": "Pull changes from the remote repository. Requires the Source Control feature to be licensed and connected to a repository.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "force": {
+          "type": "boolean",
+          "description": "Force the pull operation, overwriting local changes."
+        },
+        "variables": {
+          "type": "object",
+          "description": "Variables to be used during the pull process."
+        }
+      }
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_createVariable",
+    "description": "Create a variable in your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "The key (name) of the variable."
+        },
+        "value": {
+          "type": "string",
+          "description": "The value of the variable."
+        }
+      },
+      "required": ["key", "value"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_getVariables",
+    "description": "Retrieve variables from your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "number",
+          "description": "The maximum number of items to return.",
+          "default": 100
+        },
+        "cursor": {
+          "type": "string",
+          "description": "Pagination cursor."
+        }
+      }
+    }
+  },
+  {
+    "name": "customn8n_deleteVariable",
+    "description": "Delete a variable from your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID of the variable."
+        }
+      },
+      "required": ["id"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_updateVariable",
+    "description": "Update a variable from your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID of the variable to update."
+        },
+        "key": {
+          "type": "string",
+          "description": "The new key for the variable."
+        },
+        "value": {
+          "type": "string",
+          "description": "The new value for the variable."
+        }
+      },
+      "required": ["id", "key", "value"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_createProject",
+    "description": "Create a project on your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the project to create."
+        }
+      },
+      "required": ["name"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_getProjects",
+    "description": "Retrieve projects from your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "number",
+          "description": "The maximum number of items to return.",
+          "default": 100
+        },
+        "cursor": {
+          "type": "string",
+          "description": "Pagination cursor."
+        }
+      }
+    }
+  },
+  {
+    "name": "customn8n_deleteProject",
+    "description": "Delete a project from your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "type": "string",
+          "description": "The ID of the project."
+        }
+      },
+      "required": ["projectId"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_updateProject",
+    "description": "Update a project on your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "type": "string",
+          "description": "The ID of the project to update."
+        },
+        "name": {
+          "type": "string",
+          "description": "The new name for the project."
+        }
+      },
+      "required": ["projectId", "name"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_addUsersToProject",
+    "description": "Add one or more users to a project on your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "type": "string",
+          "description": "The ID of the project."
+        },
+        "relations": {
+          "type": "array",
+          "description": "A list of userIds and roles to add to the project.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "projectUserId": {
+                "type": "string",
+                "description": "The unique identifier of the user to add."
+              },
+              "role": {
+                "type": "string",
+                "description": "The role assigned to the user in the project."
+              }
+            },
+            "required": ["projectUserId", "role"]
+          }
+        }
+      },
+      "required": ["projectId", "relations"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_deleteUserFromProject",
+    "description": "Delete a user from a project on your instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "type": "string",
+          "description": "The ID of the project."
+        },
+        "projectUserId": {
+          "type": "string",
+          "description": "The ID of the user to remove from the project."
+        }
+      },
+      "required": ["projectId", "projectUserId"]
+    },
+    "confirmationRequired": true
+  },
+  {
+    "name": "customn8n_changeUserRoleInProject",
+    "description": "Change a user's role in a project.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "type": "string",
+          "description": "The ID of the project."
+        },
+        "projectUserId": {
+          "type": "string",
+          "description": "The ID of the user whose role is to be changed."
+        },
+        "role": {
+          "type": "string",
+          "description": "The new role to assign to the user in the project."
+        }
+      },
+      "required": ["projectId", "projectUserId", "role"]
+    },
+    "confirmationRequired": true
   }
-] 
+]

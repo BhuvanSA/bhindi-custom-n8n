@@ -22,12 +22,10 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
     const toolsConfig = JSON.parse(toolsData);
 
     // Convert JSON config to DTO objects
-    const tools: ToolDto[] = toolsConfig.map((tool: any) => new ToolDto(
-      tool.name,
-      tool.description,
-      tool.parameters,
-      tool.confirmationRequired,
-    ));
+    const tools: ToolDto[] = toolsConfig.map(
+      (tool: any) =>
+        new ToolDto(tool.name, tool.description, tool.parameters, tool.confirmationRequired)
+    );
 
     const response = new ToolsResponseDto(tools);
     res.json(response);
@@ -41,4 +39,4 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
   }
 });
 
-export default router; 
+export default router;
